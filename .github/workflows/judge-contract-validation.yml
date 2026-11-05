@@ -1,0 +1,22 @@
+name: ForgeKernel CPU tests
+
+on:
+  push:
+    branches: ['ci/judge-contract-full-20261105']
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install pytest safetensors numpy
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pytest -q
