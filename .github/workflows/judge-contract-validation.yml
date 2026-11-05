@@ -1,0 +1,22 @@
+name: Task judge regression
+
+on:
+  push:
+    branches: ['ci/judge-contract-*']
+
+permissions:
+  contents: read
+
+jobs:
+  targeted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install pytest safetensors numpy
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pytest tests/test_task_suite.py -v
